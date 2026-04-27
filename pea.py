@@ -59,43 +59,138 @@ fig_pea = px.bar(
 
 st.plotly_chart(fig_pea, use_container_width=True)
 
+# Gráficos de pizza por ano
+col1, col2 = st.columns(2)
+
+with col1:
+    fig_pie_2020 = px.pie(
+        pea_data[pea_data["Ano"] == 2020].iloc[0:1].to_dict('records')[0:1],
+        values=[20, 24, 56],
+        names=["Primário", "Secundário", "Terciário"],
+        title="Distribuição de PEA - 2020"
+    )
+    st.plotly_chart(fig_pie_2020, use_container_width=True)
+
+with col2:
+    fig_pie_2050 = px.pie(
+        values=[8, 12, 80],
+        names=["Primário", "Secundário", "Terciário"],
+        title="Distribuição de PEA - 2050"
+    )
+    st.plotly_chart(fig_pie_2050, use_container_width=True)
+
 # ----------------------------
 # 3. Áreas promissoras
 # ----------------------------
 st.header("3️⃣ Áreas promissoras por setor")
 
 areas_data = pd.DataFrame({
-    "Área": [
+    "area": [
         "Pecuária e Carne",
         "Soja e Milho",
         "Setor Florestal",
         "Exportações",
         "Indústria Extrativa",
         "Agroindústria",
+        "Máquinas e Equipamentos",
+        "Indústria da Tecnologia",
+        "Construção Civil",
         "Tecnologia da Informação",
-        "Serviços Técnico-Profissionais"
+        "Serviços Técnico-Profissionais",
+        "Transporte terrestre",
+        "Serviços (Geral)",
+        "Terceiro Setor"
     ],
-    "Crescimento (%)": [
+    "crescimento": [
         12.48,
         11.7,
         29.1,
         30,
         7,
         16,
+        5,
+        6.5,
+        1.3,
         84.4,
-        59.8
+        59.8,
+        43.5,
+        2.8,
+        16.8
+    ],
+    "setor": [
+        "Primário",
+        "Primário",
+        "Primário",
+        "Primário",
+        "Secundário",
+        "Secundário",
+        "Secundário",
+        "Secundário",
+        "Secundário",
+        "Terciário",
+        "Terciário",
+        "Terciário",
+        "Terciário",
+        "Terciário"
     ]
 })
 
+# Gráfico geral com cores por setor
 fig_areas = px.bar(
     areas_data,
-    x="Área",
-    y="Crescimento (%)",
-    color="Crescimento (%)",
-    title="Áreas mais promissoras"
+    x="area",
+    y="crescimento",
+    color="setor",
+    title="Áreas mais promissoras por setor econômico",
+    labels={"area": "Área", "crescimento": "Crescimento (%)"}
 )
 
+fig_areas.update_xaxes(tickangle=-45)
 st.plotly_chart(fig_areas, use_container_width=True)
+
+# Gráfico separado por setor
+st.subheader("Distribuição de áreas por setor:")
+
+col1, col2, col3 = st.columns(3)
+
+# Primário
+areas_primario = areas_data[areas_data["setor"] == "Primário"]
+with col1:
+    fig_prim = px.bar(
+        areas_primario,
+        y="area",
+        x="crescimento",
+        color="crescimento",
+        title="Setor Primário",
+        orientation="h"
+    )
+    st.plotly_chart(fig_prim, use_container_width=True)
+
+# Secundário
+areas_secundario = areas_data[areas_data["setor"] == "Secundário"]
+with col2:
+    fig_sec = px.bar(
+        areas_secundario,
+        y="area",
+        x="crescimento",
+        color="crescimento",
+        title="Setor Secundário",
+        orientation="h"
+    )
+    st.plotly_chart(fig_sec, use_container_width=True)
+
+# Terciário
+areas_terciario = areas_data[areas_data["setor"] == "Terciário"]
+with col3:
+    fig_terc = px.bar(
+        areas_terciario,
+        y="area",
+        x="crescimento",
+        color="crescimento",
+        title="Setor Terciário",
+        orientation="h"
+    )
+    st.plotly_chart(fig_terc, use_container_width=True)
 
 # ----------------------------
 # 4. Impacto da IA
