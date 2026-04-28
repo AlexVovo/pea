@@ -54,7 +54,8 @@ fig_pea = px.bar(
     y="Percentual",
     color="Setor",
     barmode="stack",
-    title="Distribuição da População Economicamente Ativa"
+    title="Distribuição da População Economicamente Ativa",
+    color_discrete_map={"Primário": "#87CEEB", "Secundário": "#1E3A8A", "Terciário": "#FF1493"}
 )
 
 st.plotly_chart(fig_pea, use_container_width=True)
@@ -63,29 +64,45 @@ st.plotly_chart(fig_pea, use_container_width=True)
 cores_setores = {
     "Primário": "#87CEEB",      # Azul claro
     "Secundário": "#1E3A8A",    # Azul escuro
-    "Terciário": "#EC4899"      # Rosa
+    "Terciário": "#FF1493"      # Rosa intenso
 }
 
 # Gráficos de pizza por ano
+pie_2020_data = pd.DataFrame({
+    "setor": ["Primário", "Secundário", "Terciário"],
+    "valor": [20, 24, 56]
+})
+
+pie_2050_data = pd.DataFrame({
+    "setor": ["Primário", "Secundário", "Terciário"],
+    "valor": [8, 12, 80]
+})
+
+# Cores na ordem correta
+cores_sequencia = ["#87CEEB", "#1E3A8A", "#FF1493"]
+
 col1, col2 = st.columns(2)
 
 with col1:
     fig_pie_2020 = px.pie(
-        pea_data[pea_data["Ano"] == 2020].iloc[0:1].to_dict('records')[0:1],
-        values=[20, 24, 56],
-        names=["Primário", "Secundário", "Terciário"],
+        pie_2020_data,
+        values="valor",
+        names="setor",
         title="Distribuição de PEA - 2020",
-        color_discrete_map=cores_setores
+        category_orders={"setor": ["Primário", "Secundário", "Terciário"]}
     )
+    fig_pie_2020.update_traces(marker=dict(colors=cores_sequencia, line=dict(color='#1a1a1a', width=1)))
     st.plotly_chart(fig_pie_2020, use_container_width=True)
 
 with col2:
     fig_pie_2050 = px.pie(
-        values=[8, 12, 80],
-        names=["Primário", "Secundário", "Terciário"],
+        pie_2050_data,
+        values="valor",
+        names="setor",
         title="Distribuição de PEA - 2050",
-        color_discrete_map=cores_setores
+        category_orders={"setor": ["Primário", "Secundário", "Terciário"]}
     )
+    fig_pie_2050.update_traces(marker=dict(colors=cores_sequencia, line=dict(color='#1a1a1a', width=1)))
     st.plotly_chart(fig_pie_2050, use_container_width=True)
 
 # ----------------------------
