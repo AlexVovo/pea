@@ -59,6 +59,13 @@ fig_pea = px.bar(
 
 st.plotly_chart(fig_pea, use_container_width=True)
 
+# Definir paleta de cores para os setores
+cores_setores = {
+    "Primário": "#87CEEB",      # Azul claro
+    "Secundário": "#1E3A8A",    # Azul escuro
+    "Terciário": "#EC4899"      # Rosa
+}
+
 # Gráficos de pizza por ano
 col1, col2 = st.columns(2)
 
@@ -67,7 +74,8 @@ with col1:
         pea_data[pea_data["Ano"] == 2020].iloc[0:1].to_dict('records')[0:1],
         values=[20, 24, 56],
         names=["Primário", "Secundário", "Terciário"],
-        title="Distribuição de PEA - 2020"
+        title="Distribuição de PEA - 2020",
+        color_discrete_map=cores_setores
     )
     st.plotly_chart(fig_pie_2020, use_container_width=True)
 
@@ -75,7 +83,8 @@ with col2:
     fig_pie_2050 = px.pie(
         values=[8, 12, 80],
         names=["Primário", "Secundário", "Terciário"],
-        title="Distribuição de PEA - 2050"
+        title="Distribuição de PEA - 2050",
+        color_discrete_map=cores_setores
     )
     st.plotly_chart(fig_pie_2050, use_container_width=True)
 
@@ -142,7 +151,8 @@ fig_areas = px.bar(
     y="crescimento",
     color="setor",
     title="Áreas mais promissoras por setor econômico",
-    labels={"area": "Área", "crescimento": "Crescimento (%)"}
+    labels={"area": "Área", "crescimento": "Crescimento (%)"},
+    color_discrete_map=cores_setores
 )
 
 fig_areas.update_xaxes(tickangle=-45)
@@ -160,10 +170,10 @@ with col1:
         areas_primario,
         y="area",
         x="crescimento",
-        color="crescimento",
         title="Setor Primário",
         orientation="h"
     )
+    fig_prim.update_traces(marker_color=cores_setores["Primário"])
     st.plotly_chart(fig_prim, use_container_width=True)
 
 # Secundário
@@ -173,10 +183,10 @@ with col2:
         areas_secundario,
         y="area",
         x="crescimento",
-        color="crescimento",
         title="Setor Secundário",
         orientation="h"
     )
+    fig_sec.update_traces(marker_color=cores_setores["Secundário"])
     st.plotly_chart(fig_sec, use_container_width=True)
 
 # Terciário
@@ -186,10 +196,10 @@ with col3:
         areas_terciario,
         y="area",
         x="crescimento",
-        color="crescimento",
         title="Setor Terciário",
         orientation="h"
     )
+    fig_terc.update_traces(marker_color=cores_setores["Terciário"])
     st.plotly_chart(fig_terc, use_container_width=True)
 
 # ----------------------------
